@@ -1,0 +1,9 @@
+port: 3306
+Root Password: rootpassword
+
+user: ibanuser
+pass: ibanpassword
+
+Windows Service Name: MySQL80 [NOT SET UP TO START WITH WINDOWS]
+
+
