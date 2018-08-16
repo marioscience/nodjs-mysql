@@ -1,10 +1,27 @@
 version: '3'
 
 services:
-    web:
-        build: ./server
+    db:
+      build: ./src/database
+      restart: always
+      expose:
+        - 3306
+      environment:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_USER: ibanuser
+          MYSQL_PASSWORD: ibanpassword
+          MYSQL_DATABASE: ibanline
+
+    backend:
+        image: node:8.11
         command: npm start
+        user: "node"
+        working_dir: /home/node/app
+        environment:
+          - NODE_ENV=development
         volumes:
-            - .:/src
+            - ./src/server:/home/node/app
         ports:
-            - "8000:8000"
+            - 5061:3000
+        depends_on:
+          - db

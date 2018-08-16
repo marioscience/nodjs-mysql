@@ -3,31 +3,32 @@
 -- need to be segmented and organized.
 CREATE DATABASE IF NOT EXISTS ibanonline;
 
-CREATE TABLE IF NOT EXISTS transactions (
-	transaction_id BIGINT,
-    amount DECIMAL NOT NULL,
-    transaction_date DATETIME NOT NULL,
-    user_id BIGINT,
-    PRIMARY KEY (transaction_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id),
-    INDEX (amount),
-    INDEX (transaction_date)
-);
+USE ibanonline;
 
-CREATE TABLE IF NOT EXISTS users (
-	user_id BIGINT,
+CREATE TABLE IF NOT EXISTS ibanonline.users (
+	user_id BIGINT NOT NULL AUTO_INCREMENT,
     username VARCHAR(30),
     password_hash VARCHAR(50),
     PRIMARY KEY (user_id)
 );
 
+CREATE TABLE IF NOT EXISTS ibanonline.transactions (
+	transaction_id BIGINT NOT NULL AUTO_INCREMENT,
+    amount DECIMAL NOT NULL,
+    transaction_date DATETIME NOT NULL,
+    user_id BIGINT,
+    PRIMARY KEY (transaction_id),
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    INDEX (amount),
+    INDEX (transaction_date)
+);
+
 -- The amount and dates should contain indexes because they are
 -- going to be used heavily to filter queries
 
-INSERT INTO users (user_id, username, password_hash) VALUES (
-	1, "testuser", "f8qnyc98hfho8fw8yrn9cYPA8YXUWuf9NWEFYNEWIF",
-    2, "regularUser", "fyn2c983rypfaeunfyo872tbxuyagkfoz9naxpyechbv"
-);
+INSERT INTO users (user_id, username, password_hash) VALUES
+	(1, "testuser", "f8qnyc98hfho8fw8yrn9cYPA8YXUWuf9NWEFYNEWIF"),
+    (2, "regularUser", "fyn2c983rypfaeunfyo872tbxuyagkfoz9naxpyechbv");
 
 INSERT INTO transactions (amount, transaction_date, user_id) VALUES 
 	(1231.00, '2016-01-21 12:49:01', 1),
