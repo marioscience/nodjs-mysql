@@ -1,14 +1,29 @@
-const http = require('http');
+const express = require('express');
+const mysql = require('mysql');
+const app = express();
 
-const hostname = '127.0.0.1';
-const port = 3000;
-
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World\n');
+// root password used for now. need custom user
+const db_connection = mysql.createConnection({
+    host: '0.0.0.0',
+    user: 'ibanuser',
+    password: 'ibanpassword',
+    database: 'ibanonline'
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
+app.get('/', (req, res) => {
+    let result = db_connection.query('SELECT * FROM transactions', (error, results, fields) => {
+        // Create object to have metadata with payload. validation errors, payload and any other information the
+        // user needs go here
+        let metadata = {
+            validation_errors: []
+        };
+
+        if (error) throw error;
+        let resultJsonString = JSON.stringify(result);
+        metadata.data = JSON.parse(resultJsonString);
+
+        res.json(metadata);
+    });
 });
+
+app.listen(3000, () => console.log('Application listening on port 3000.'));
