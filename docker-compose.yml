@@ -1,16 +1,17 @@
 version: '3'
 
 services:
-    db:
+    mysql_db:
         build: ./src/database
         restart: always
-        expose:
-          - "3306"
+        ports:
+          - "3306:3306"
         environment:
             MYSQL_ROOT_PASSWORD: rootpassword
             MYSQL_USER: ibanuser
             MYSQL_PASSWORD: ibanpassword
             MYSQL_DATABASE: ibanonline
+            MYSQL_HOST: localhost
 
     backend:
         build: ./src/server
@@ -23,5 +24,6 @@ services:
             - ./src/server:/home/node/app
         ports:
             - "8080:3000"
+        restart: on-failure
         depends_on:
-            - db
+            - mysql_db
