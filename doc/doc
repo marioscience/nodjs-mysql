@@ -1,0 +1,34 @@
+The API has a get method that returns all records by default.
+http://localhost:8080/transactions
+
+The query can be filtered by date ranges:
+http://localhost:8080/transactions?dateRange=lastDay
+http://localhost:8080/transactions?dateRange=lastThreeDays
+http://localhost:8080/transactions?dateRange=lastWeek
+http://localhost:8080/transactions?dateRange=lastMonth
+
+
+by amount:
+http://localhost:8080/transactions?amountGt=200
+http://localhost:8080/transactions?amountLt=1000
+http://localhost:8080/transactions?amountEq=1000
+
+or a combination of both:
+http://localhost:8080/transactions?amountGt=200&dateRange=lastThreeDays
+http://localhost:8080/transactions?amountLt=2000&dateRange=lastMonth
+
+1. Amount and transaction date should be indexed independently since they are to be used to filter queries directly.
+
+2.
+General things with how this was implemented:
+- Data needs more edge cases for testing.
+- Seed data needs sql script
+- Query strings allow SQL injection as they are right now. They need to be checked and sanitized carefully.
+ Issues regarding this specific feature request:
+- The Docker configuration need development and a production environments.
+-
+
+3.
+Not a replacement but I would consider adding an ORM to manage data. That way the schema in the database can be modeled
+And that way abstract away SQL queries.
+I personally consider postgreSQL a more robust relational database system.
